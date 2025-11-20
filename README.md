@@ -1,90 +1,245 @@
-🛒 Olist E-Commerce Data Analysis
+# 🛒 Olist E-Commerce Data Analysis & Delivery Delay Prediction
 
-This project is an exploratory analysis of the [Olist E-Commerce Dataset](https://www.kaggle.com/datasets/olistbr/brazilian-ecommerce), which contains over 100,000 real orders made by customers across Brazil.
+### Developer Documentation
 
-The goal was to understand customer behavior, sales distribution, delivery performance, and seller activity using real marketplace data.
+This project is a complete end-to-end data analysis and machine-learning workflow built using the **Olist Brazilian E-Commerce Dataset**.
+It covers everything from data cleaning to visualization — and finally, a **Random Forest ML model that predicts whether an order will be delayed**.
 
+Originally created as a data exploration notebook, I expanded it into a structured, analytics-driven, machine-learning project designed for real business decision-making.
 
+---
 
-🧭 Project Overview
+# 🌟 Overview
 
-Olist is a Brazilian e-commerce platform that connects small businesses to major online marketplaces.
-I wanted to explore this dataset to answer a few key questions:
+The goal of this project:
 
--Which states generate the most sales?
--How well does Olist perform in terms of on-time delivery?
--Who are the top-performing sellers?
--Does the sales distribution follow the 80/20 rule?
+### ✔ Analyze real e-commerce business patterns
 
+### ✔ Identify top sellers, customer behavior, revenue trends
 
-🧹 Data Cleaning & Preparation
+### ✔ Understand delivery performance
 
-I worked with multiple CSV files from Kaggle, including orders, order items, customers, products, and sellers.
-Here’s what I did during the data prep phase:
+### ✔ Build a **predictive ML model** for delivery delays
 
--Merged all relevant tables into a single dataset using common keys (`order_id`, `customer_id`, etc.)
--Removed missing or inconsistent values
--Converted timestamps to datetime objects
--Calculated delivery delays and created an on-time/delayed delivery indicator
+This documentation is written for **data analysts, ML engineers, and recruiters** who want to understand the depth of the analysis and modeling.
 
-The final cleaned dataset was then exported for analysis.
+---
 
+# 🔧 Requirements
 
-📊 Main Insights
+### Software
 
-Here are a few highlights from the analysis:
+* Python 3.8+
+* Jupyter Notebook / Colab
 
--Top States: Most orders come from São Paulo (SP), followed by Rio de Janeiro (RJ) and Minas Gerais (MG).
--Delivery Performance: Around 93% of orders were delivered on time — a strong operational metric.
--Seller Revenue: A small group of sellers generate a large portion of total sales, showing a clear revenue concentration.
--Pareto Effect: The 80/20 rule applies — a minority of sellers drive the majority of revenue.
+### Libraries Used
 
+```
+pandas  
+numpy  
+matplotlib  
+seaborn  
+scikit-learn  
+joblib  
+plotly (optional)
+```
 
-📈 Visualizations
+Install everything:
 
-Some of the charts created during this analysis include:
+```bash
+pip install pandas numpy matplotlib seaborn scikit-learn joblib plotly
+```
 
--Total sales by customer state
--On-time vs delayed deliveries
--Top 10 sellers by total revenue
--Monthly sales trends
+---
 
-All visuals were made using **Matplotlib** and **Seaborn**.
+# ✨ Key Features
 
+## 🔹 1. Data Cleaning & Feature Engineering
 
-⚙️ Tools & Libraries
+Cleaned multiple datasets:
 
--Python
--Pandas & NumPy for data cleaning and manipulation
--Matplotlib & Seaborn for data visualization
--Google Colab as the main development environment
+* Orders
+* Order items
+* Customers
+* Products
 
+Performed:
 
-📂 Repository Structure
-File                                Description
-E-Commerce Analysis.ipynb           Colab notebook with full analysis
-cleaned_olist_sales_data.csv        Exported cleaned dataset used for analysis
-README.md                           Project overview and documentation
+* Datetime conversions
+* Merging all datasets (order_id, customer_id)
+* Handling missing values
+* Removing invalid timestamps
+* Creating new business features
 
+**Feature created: Delivery Delay (days)**
 
-🧠 Reflections
+```python
+delivery_delay = order_delivered_customer_date - order_estimated_delivery_date
+```
 
-This project was a great opportunity to practice real-world data wrangling and exploratory analysis.
-The Olist dataset is messy and diverse, which made it perfect for learning how to handle joins, timestamps, and feature creation.
+**Binary target created:**
 
-If I extend this project, I’d like to:
+* **0 = On-Time**
+* **1 = Delayed**
 
--Explore customer lifetime value (CLV)
--Analyze product categories and pricing patterns
--Build simple predictive models for delivery delays
+---
 
+## 🔹 2. Exploratory Data Analysis (EDA)
 
-👤 About Me
+Highlights include:
 
-VIDHYA DHARI YELURI
-📧 vidhyay458@gmail.com
-🔗 in/vidhya-yeluri-88432a254
+### 📌 Sales Analysis
 
+* Monthly revenue trends
+* State-wise distribution
+* Top-selling categories
 
-💬 Final Note
-This was a fun and insightful project — it helped me strengthen my data analysis workflow and understand how real e-commerce businesses operate behind the scenes.
+### 📌 Customer Insights
+
+* Customer geographic spread
+* Repeat vs one-time behavior
+
+### 📌 Operational Insights
+
+* On-time vs delayed delivery distribution
+* Seller dominance using Pareto 80/20 rule
+
+### 📌 Visualizations
+
+Created using **Matplotlib** + **Seaborn**:
+
+* Monthly sales line chart
+* Top 10 sellers bar chart
+* Delivery performance pie chart
+* Correlation heatmap
+
+---
+
+# 🤖 3. Delivery Delay Prediction Model (Random Forest)
+
+The notebook includes a **full ML pipeline**.
+
+### ✔ Feature Engineering for ML
+
+Selected features:
+
+* `price`
+* `freight_value`
+* `order_month`
+
+### ✔ Data Preparation
+
+```python
+X_train, X_test, y_train, y_test = train_test_split(...)
+StandardScaler()
+```
+
+### ✔ Model Used
+
+**RandomForestClassifier**
+
+```python
+rf_model = RandomForestClassifier(n_estimators=200, random_state=42)
+rf_model.fit(X_train_scaled, y_train)
+```
+
+### ✔ Evaluation
+
+Generated:
+
+* Accuracy
+* Precision
+* Recall
+* F1-score
+
+```python
+print(classification_report(y_test, y_pred))
+```
+
+### ✔ Example Prediction
+
+```python
+features = [[5, 200, 1]]
+rf_model.predict(features)
+rf_model.predict_proba(features)
+```
+
+Example Output:
+
+* **Prediction:** `[1]` → Delayed
+* **Probability:** `[[0.25, 0.75]]`
+
+### ✔ Saved Model Files
+
+```python
+joblib.dump(rf_model, "delivery_delay_model.pkl")
+joblib.dump(scaler, "scaler.pkl")
+```
+
+These can be deployed into an API or other ML system.
+
+---
+
+# 🧭 Business Value of the ML Model
+
+This model helps businesses predict:
+
+* Which orders will likely be delayed
+* Which customers may experience late delivery
+* Which regions/products contribute to delays
+* Early flagging of logistics bottlenecks
+
+Businesses can use these predictions to:
+
+* Notify customers proactively
+* Improve route planning
+* Offer compensation / priority shipping
+* Optimize seller assignment
+
+---
+
+# 📂 Repository Structure
+
+```
+/
+├── E-Commerce Analysis.ipynb          # Complete analysis + ML model
+├── cleaned_olist_sales_data.csv       # Final cleaned dataset
+├── delivery_delay_model.pkl           # Exported Random Forest model
+├── scaler.pkl                         # Scaler for prediction pipeline
+├── images/                            # All visualizations
+└── README.md                          # Documentation
+```
+
+---
+
+# 🧠 Lessons Learned
+
+* Working with multiple relational tables improves understanding of joins
+* Real-world timestamps are messy → require careful parsing
+* Delivery delay patterns reveal major business inefficiencies
+* Random Forest handles nonlinearities in logistics data very well
+
+---
+
+# 🚀 Possible Extensions
+
+Future improvements:
+
+* Delivery time regression model (predict number of days)
+* Customer lifetime value (CLV) modeling
+* Product recommender system
+* Streamlit dashboard
+* ARIMA/Prophet sales forecasting
+
+---
+
+# 👩‍💻 About Me
+
+**VIDHYA DHARI YELURI**
+📧 [vidhyay458@gmail.com](mailto:vidhyay458@gmail.com)
+🔗 LinkedIn: *in/vidhya-yeluri-88432a254*
+🔗 GitHub: [https://github.com/yvidhya](https://github.com/yvidhya)
+
+⭐ If you like the project, consider starring the repo!
+
+---
